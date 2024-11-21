@@ -1,4 +1,4 @@
-name: Build Docker Image Locally
+name: Build Docker Image for Docker Desktop
 
 on:
   push:
@@ -17,26 +17,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Install Docker
-      - name: Set up Docker
+      # Install Docker using the official installation script
+      - name: Install Docker
         run: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sh get-docker.sh
           docker --version
 
       # Build the Docker image
       - name: Build Docker image
         run: |
-          docker build -t flask-local:v0 .
+          docker build -t my-docker-image:latest .
 
-      # # (Optional) Save the Docker image as a tar file for download
+      # # Save the Docker image as a tar file
       # - name: Save Docker image as tar file
       #   run: |
-      #     docker save -o my-docker-image.tar local-image-name:latest
+      #     docker save -o my-docker-image.tar my-docker-image:latest
 
-      # # (Optional) Upload the image tar to GitHub Actions artifacts
+      # # Upload the tar file as an artifact for download
       # - name: Upload Docker image artifact
       #   uses: actions/upload-artifact@v3
       #   with:
-      #     name: my-docker-image
+      #     name: docker-image
       #     path: my-docker-image.tar
